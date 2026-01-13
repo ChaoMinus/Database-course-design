@@ -213,6 +213,27 @@ CREATE TABLE `wuliu`  (
 INSERT INTO `wuliu` VALUES (2, '13525112345', '010100', '20分钟', 0);
 
 -- ----------------------------
+-- Table structure for shop_apply
+-- ----------------------------
+DROP TABLE IF EXISTS `shop_apply`;
+CREATE TABLE `shop_apply`  (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `shop_name` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
+  `price` int NOT NULL,
+  `contact_name` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
+  `contact_phone` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
+  `description` varchar(500) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL,
+  `status` int NOT NULL DEFAULT 0 COMMENT '0:待审核,1:通过,2:拒绝',
+  `apply_time` datetime NULL DEFAULT CURRENT_TIMESTAMP,
+  `process_time` datetime NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `id`(`id`) USING BTREE,
+  INDEX `shop_name`(`shop_name`) USING BTREE,
+  INDEX `status`(`status`) USING BTREE
+) ENGINE = InnoDB CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = DYNAMIC;
+
+
+-- ----------------------------
 -- View structure for sended_order
 -- ----------------------------
 DROP VIEW IF EXISTS `sended_order`;

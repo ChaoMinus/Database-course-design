@@ -256,6 +256,98 @@ def user_pwd_chg():
             return jsonify(status=200,msg="修改成功")
 
 
+# 商家申请接口
+@app.route("/api/shop/apply", methods=["POST"])
+@cross_origin()
+def shop_apply():
+    rq = request.json
+    # 获取申请信息
+    shop_name = rq.get("shop_name")
+    price = rq.get("price")
+    contact_name = rq.get("contact_name")
+    contact_phone = rq.get("contact_phone")
+    description = rq.get("description")
+    
+    # 检查是否已存在相同店铺名
+    exist_shop = db.session.execute(text('select * from fastfood_shop where shop_name="%s"' % shop_name)).fetchall()
+    if exist_shop:
+        return jsonify(status=1000, msg="该店铺已存在")
+    
+    # 检查是否已有相同店铺名的申请
+    exist_apply = db.session.execute(text('select * from shop_apply where shop_name="%s" and status=0' % shop_name)).fetchall()
+    if exist_apply:
+        return jsonify(status=1000, msg="该店铺已有待审核的申请")
+    
+    # 插入申请记录
+    sql = 'insert into shop_apply (shop_name, price, contact_name, contact_phone, description, status) values ("%s", %d, "%s", "%s", "%s", 0)' % (shop_name, int(price), contact_name, contact_phone, description)
+    
+    db.session.execute(text(sql))
+    db.session.commit()
+    return jsonify(status=200, msg="申请提交成功")
+
+# 获取商家申请列表（管理员用）
+@app.route("/api/manager/shop_apply", methods=["GET"])
+@cross_origin()
+def manager_shop_apply():
+    status = request.args.get('status', '0')
+    data = db.session.execute(text('select * from shop_apply where status=%s order by apply_time desc' % status)).fetchall()
+    Data = []
+    for i in range(len(data)):
+        dic = dict(
+            id=data[i][0],
+            shop_name=data[i][1],
+            price=data[i][2],
+            contact_name=data[i][3],
+            contact_phone=data[i][4],
+            description=data[i][5],
+            status=data[i][6],
+            apply_time=data[i][7].strftime('%Y-%m-%d %H:%M:%S') if data[i][7] else '',
+            process_time=data[i][8].strftime('%Y-%m-%d %H:%M:%S') if data[i][8] else ''
+        )
+        Data.append(dic)
+    return jsonify(status=200, tabledata=Data)
+
+# 处理商家申请（管理员用）
+@app.route("/api/manager/shop_apply/process", methods=["POST"])
+@cross_origin()
+def process_shop_apply():
+    rq = request.json
+    apply_id = rq.get("apply_id")
+    action = rq.get("action")  # 'approve' 或 'reject'
+    
+    # 获取申请信息
+    apply_info = db.session.execute(text('select * from shop_apply where id=%d' % apply_id)).first()
+    if not apply_info:
+        return jsonify(status=1000, msg="申请不存在")
+    
+    if action == 'approve':
+        # 审核通过，添加到店铺表
+        shop_name = apply_info[1]
+        price = apply_info[2]
+        
+        # 再次检查是否已存在
+        exist_shop = db.session.execute(text('select * from fastfood_shop where shop_name="%s"' % shop_name)).fetchall()
+        if exist_shop:
+            return jsonify(status=1000, msg="该店铺已存在")
+        
+        # 插入到店铺表
+        db.session.execute(text('insert into fastfood_shop(shop_name, price, m_sale_v) values("%s", %d, 0)' % (shop_name, price)))
+        
+        # 更新申请状态为通过
+        db.session.execute(text('update shop_apply set status=1, process_time=NOW() where id=%d' % apply_id))
+        
+        db.session.commit()
+        return jsonify(status=200, msg="审核通过，店铺已添加")
+    
+    elif action == 'reject':
+        # 拒绝申请
+        db.session.execute(text('update shop_apply set status=2, process_time=NOW() where id=%d' % apply_id))
+        db.session.commit()
+        return jsonify(status=200, msg="申请已拒绝")
+    
+    return jsonify(status=1000, msg="无效的操作")
+
+
 @app.route("/api/manager/shop", methods=["POST", "GET", "DELETE"])
 @cross_origin()
 def manager_shop():

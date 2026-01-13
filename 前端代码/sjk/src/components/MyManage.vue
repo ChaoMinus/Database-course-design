@@ -52,6 +52,11 @@
 
                     </el-submenu>
 
+                    <el-menu-item index="9">
+                        <i class="el-icon-s-claim"></i>
+                        <span slot="title">商家申请</span>
+                    </el-menu-item>
+
                 </el-menu>
             </div>
             <div class="main">
@@ -85,6 +90,10 @@
                 <div id="orderunsend" v-show="active == 8">
                     <orderunsend></orderunsend>
                 </div>
+
+                <div id="manageshopapply" v-show="active == 9">
+                    <manageshopapply></manageshopapply>
+                </div>
             </div>
         </div>
     </div>
@@ -99,6 +108,8 @@ import wuliuunended from '@/components/ManageWuliu/WuliuUnended.vue'
 import ordersended from '@/components/ManageOrder/BeSended.vue'
 import ordersending from '@/components/ManageOrder/BeSending.vue'
 import orderunsend from '@/components/ManageOrder/UnSend.vue'
+import manageshopapply from '@/components/ManageShopApply.vue'
+
 export default {
     components: {
         manageshop: manageshop,
@@ -108,7 +119,8 @@ export default {
         wuliuunended: wuliuunended,
         ordersended: ordersended,
         ordersending: ordersending,
-        orderunsend: orderunsend
+        orderunsend: orderunsend,
+        manageshopapply: manageshopapply
     },
     data() {
         return {
