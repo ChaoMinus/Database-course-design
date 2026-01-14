@@ -53,9 +53,46 @@
                 </el-pagination>
             </div>
 
-            <!-- 原有对话框保持不变 -->
+
             <el-dialog title="订餐表单" :visible.sync="dialog" class="dialog" width="40%">
-                <!-- 原有代码保持不变 -->
+                <div>
+                    <el-form ref="form" :model="form" label-width="100px">
+                        <el-form-item label="店铺名称：">
+                            <span>{{ form.shop_name }}</span>
+                            <!-- <el-input v-model="form.shop_name"></el-input> -->
+                        </el-form-item>
+
+                        <el-form-item label="产品单价：">
+                            <span>{{ form.order_money }}</span>
+                            <!-- <el-input v-model="form.order_money"></el-input> -->
+                        </el-form-item>
+
+                        <el-form-item label="订餐方式：">
+                            <el-select v-model="form.order_way" placeholder="请选择订餐方式">
+                                <el-option label="人工订餐" value="人工订餐"></el-option>
+                                <el-option label="网上订餐" value="网上订餐"></el-option>
+                            </el-select>
+                        </el-form-item>
+
+                        <!-- <el-form-item label="客户电话：">
+                            <el-input v-model="form.cons_phone"></el-input>
+                        </el-form-item> -->
+
+                        <el-form-item label="客户姓名：">
+                            <el-input v-model="form.cons_name"></el-input>
+                        </el-form-item>
+
+                        <el-form-item label="送餐地址：">
+                            <el-input v-model="form.cons_addre"></el-input>
+                        </el-form-item>
+
+                    </el-form>
+                    <div style="text-align: center;">
+                        <el-button type="primary" @click="add">
+                            提交
+                        </el-button>
+                    </div>
+                </div>
             </el-dialog>
         </div>
     </div>
