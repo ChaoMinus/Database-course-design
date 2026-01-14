@@ -160,17 +160,53 @@
                 </div>
             </el-dialog>
 
-            <!-- 原对话框保持不变 -->
             <el-dialog title="添加店铺" :visible.sync="dia_add" width="30%">
-                <!-- 原有代码保持不变 -->
+                <el-form ref="add_form" :model="add_form" label-width="100px" :rules="add_form_rules">
+                    <el-form-item label="店铺名称：" prop="shop_name">
+                        <el-input v-model="add_form.shop_name"></el-input>
+                    </el-form-item>
+                    <el-form-item label="产品单价：" prop="price">
+                        <el-input v-model="add_form.price"></el-input>
+                    </el-form-item>
+                    <el-form-item label="月销量：" prop="m_sale_v">
+                        <el-input v-model="add_form.m_sale_v"></el-input>
+                    </el-form-item>
+                </el-form>
+                <div style="text-align: center;">
+                    <el-button type="primary" @click="addshop()">
+                        添加
+                    </el-button>
+                </div>
             </el-dialog>
 
             <el-dialog title="修改店铺" :visible.sync="dia_chg" width="30%">
-                <!-- 原有代码保持不变 -->
+                <el-form ref="form" :model="chg_form" label-width="100px">
+                    <el-form-item label="店铺名称：">
+                        <span>{{ chg_form.shop_name }}</span>
+                    </el-form-item>
+                    <el-form-item label="产品单价：">
+                        <el-input v-model="chg_form.price"></el-input>
+                    </el-form-item>
+                    <el-form-item label="月销量：">
+                        <el-input v-model="chg_form.m_sale_v"></el-input>
+                    </el-form-item>
+                </el-form>
+                <div style="text-align: center;">
+                    <el-button type="primary" @click="changeshop()">
+                        修改
+                    </el-button>
+                </div>
             </el-dialog>
             
             <el-dialog title="删除店铺" :visible.sync="dia_dlt" width="30%">
-                <!-- 原有代码保持不变 -->
+                <div>
+                    确定删除此店铺吗？
+                </div>
+                <div style="text-align: center;">
+                    <el-button type="primary" @click="deleteshop()">
+                        确定
+                    </el-button>
+                </div>
             </el-dialog>
         </div>
     </div>
