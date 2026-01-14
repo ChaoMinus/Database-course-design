@@ -389,6 +389,162 @@ def manager_shop():
         return jsonify(status=200, msg="删除成功")
 
 
+# 获取店铺营业额统计（简要，用于店铺列表）
+@app.route("/api/manager/shop/revenue", methods=["GET"])
+@cross_origin()
+def manager_shop_revenue():
+    try:
+        # 使用视图查询店铺营业额
+        sql = text('''
+            SELECT 
+                shop_name,
+                IFNULL(total_revenue, 0) as total_revenue,
+                IFNULL(order_count, 0) as order_count
+            FROM fastfood_shop fs
+            LEFT JOIN shop_revenue_view srv ON fs.shop_name = srv.shop_name
+        ''')
+        data = db.session.execute(sql).fetchall()
+        
+        revenue_stats = []
+        for row in data:
+            dic = {
+                'shop_name': row[0],
+                'total_revenue': float(row[1]) if row[1] else 0,
+                'order_count': int(row[2]) if row[2] else 0
+            }
+            revenue_stats.append(dic)
+            
+        return jsonify(status=200, revenue_stats=revenue_stats)
+    except Exception as e:
+        print(f"获取店铺营业额失败: {e}")
+        return jsonify(status=1000, msg="获取营业额数据失败")
+
+# 获取店铺营业额详细统计（用于统计页面）
+@app.route("/api/manager/shop/revenue/detail", methods=["GET"])
+@cross_origin()
+def manager_shop_revenue_detail():
+    try:
+        # 使用视图查询详细统计
+        sql = text('SELECT * FROM shop_revenue_view ORDER BY total_revenue DESC')
+        data = db.session.execute(sql).fetchall()
+        
+        revenue_stats = []
+        for row in data:
+            dic = {
+                'shop_name': row[0],
+                'order_count': int(row[1]),
+                'total_revenue': float(row[2]),
+                'avg_order_value': float(row[3])
+            }
+            revenue_stats.append(dic)
+            
+        return jsonify(status=200, revenue_stats=revenue_stats)
+    except Exception as e:
+        print(f"获取店铺详细营业额失败: {e}")
+        return jsonify(status=1000, msg="获取详细营业额数据失败")
+
+# 获取平台总营业额统计
+@app.route("/api/manager/platform/revenue", methods=["GET"])
+@cross_origin()
+def manager_platform_revenue():
+    try:
+        # 使用视图查询平台总营业额
+        sql = text('SELECT * FROM platform_revenue_view')
+        data = db.session.execute(sql).first()
+        
+        if data:
+            platform_stats = {
+                'total_orders': int(data[1]),
+                'total_revenue': float(data[2]),
+                'avg_order_value': float(data[3])
+            }
+        else:
+            # 如果没有数据，返回0值
+            platform_stats = {
+                'total_orders': 0,
+                'total_revenue': 0.0,
+                'avg_order_value': 0.0
+            }
+            
+        return jsonify(status=200, platform_stats=platform_stats)
+    except Exception as e:
+        print(f"获取平台营业额失败: {e}")
+        # 如果视图不存在，使用直接查询
+        try:
+            sql = text('''
+                SELECT 
+                    COUNT(o.order_id) AS total_orders,
+                    IFNULL(SUM(o.order_money), 0) AS total_revenue,
+                    IFNULL(AVG(o.order_money), 0) AS avg_order_value
+                FROM oorder o
+                WHERE o.checked IN (1, 2)
+            ''')
+            data = db.session.execute(sql).first()
+            
+            platform_stats = {
+                'total_orders': int(data[0]) if data[0] else 0,
+                'total_revenue': float(data[1]) if data[1] else 0.0,
+                'avg_order_value': float(data[2]) if data[2] else 0.0
+            }
+            
+            return jsonify(status=200, platform_stats=platform_stats)
+        except Exception as e2:
+            print(f"直接查询平台营业额失败: {e2}")
+            return jsonify(status=1000, msg="获取平台营业额数据失败")
+
+# 修改用户获取店铺接口，添加搜索功能支持
+@app.route("/api/user/shop/search", methods=["GET"])
+@cross_origin()
+def user_shop_search():
+    try:
+        search_keyword = request.args.get('keyword', '').strip()
+        
+        if search_keyword:
+            # 如果有搜索关键词
+            sql = text('SELECT * FROM fastfood_shop WHERE shop_name LIKE :keyword')
+            data = db.session.execute(sql, {'keyword': f'%{search_keyword}%'}).fetchall()
+        else:
+            # 如果没有搜索关键词，返回所有
+            sql = text('SELECT * FROM fastfood_shop')
+            data = db.session.execute(sql).fetchall()
+            
+        Data = []
+        for i in range(len(data)):
+            dic = dict(shop_name=data[i][0], price=data[i][1], sale=data[i][2])
+            Data.append(dic)
+            
+        return jsonify(status=200, tabledata=Data, search_keyword=search_keyword)
+    except Exception as e:
+        print(f"搜索店铺失败: {e}")
+        return jsonify(status=1000, msg="搜索店铺失败")
+
+# 修改管理员获取店铺接口，添加搜索功能支持
+@app.route("/api/manager/shop/search", methods=["GET"])
+@cross_origin()
+def manager_shop_search():
+    try:
+        search_keyword = request.args.get('keyword', '').strip()
+        
+        if search_keyword:
+            # 如果有搜索关键词
+            sql = text('SELECT * FROM fastfood_shop WHERE shop_name LIKE :keyword')
+            data = db.session.execute(sql, {'keyword': f'%{search_keyword}%'}).fetchall()
+        else:
+            # 如果没有搜索关键词，返回所有
+            sql = text('SELECT * FROM fastfood_shop')
+            data = db.session.execute(sql).fetchall()
+            
+        Data = []
+        for i in range(len(data)):
+            dic = dict(shop_name=data[i][0], price=data[i][1], sale=data[i][2])
+            Data.append(dic)
+            
+        return jsonify(status=200, tabledata=Data, search_keyword=search_keyword)
+    except Exception as e:
+        print(f"搜索店铺失败: {e}")
+        return jsonify(status=1000, msg="搜索店铺失败")
+    
+
 @app.route("/api/manager/server", methods=["POST", "GET", "DELETE"])
 @cross_origin()
 def manager_server():

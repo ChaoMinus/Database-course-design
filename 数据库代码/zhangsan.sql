@@ -1,17 +1,17 @@
 /*
- Navicat Premium Data Transfer
+ Navicat Premium Dump SQL
 
- Source Server         : 本地
+ Source Server         : root
  Source Server Type    : MySQL
- Source Server Version : 80032
+ Source Server Version : 80043 (8.0.43)
  Source Host           : localhost:3306
- Source Schema         : wf_sql_ks
+ Source Schema         : zhangsan
 
  Target Server Type    : MySQL
- Target Server Version : 80032
+ Target Server Version : 80043 (8.0.43)
  File Encoding         : 65001
 
- Date: 20/11/2023 19:58:13
+ Date: 14/01/2026 10:09:31
 */
 
 SET NAMES utf8mb4;
@@ -26,9 +26,9 @@ CREATE TABLE `dispatcher`  (
   `dispatcher_name` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
   `dispatcher_phone` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
   PRIMARY KEY (`dispatcher_id`) USING BTREE,
-  UNIQUE INDEX `dispatcher_id`(`dispatcher_id`) USING BTREE,
-  INDEX `dispatcher_name`(`dispatcher_name`) USING BTREE,
-  INDEX `dispatcher_phone`(`dispatcher_phone`) USING BTREE
+  UNIQUE INDEX `dispatcher_id`(`dispatcher_id` ASC) USING BTREE,
+  INDEX `dispatcher_name`(`dispatcher_name` ASC) USING BTREE,
+  INDEX `dispatcher_phone`(`dispatcher_phone` ASC) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -48,15 +48,15 @@ CREATE TABLE `fastfood_shop`  (
   `price` int NOT NULL COMMENT '价格',
   `m_sale_v` int NOT NULL COMMENT '销售量',
   PRIMARY KEY (`shop_name`) USING BTREE,
-  UNIQUE INDEX `shop_name`(`shop_name`) USING BTREE,
-  INDEX `price`(`price`) USING BTREE,
-  INDEX `m_sale_v`(`m_sale_v`) USING BTREE
+  UNIQUE INDEX `shop_name`(`shop_name` ASC) USING BTREE,
+  INDEX `price`(`price` ASC) USING BTREE,
+  INDEX `m_sale_v`(`m_sale_v` ASC) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of fastfood_shop
 -- ----------------------------
-INSERT INTO `fastfood_shop` VALUES ('大美鸡公煲', 15, 100);
+INSERT INTO `fastfood_shop` VALUES ('大美鸡公煲', 15, 101);
 INSERT INTO `fastfood_shop` VALUES ('天美自选饭', 10, 200);
 INSERT INTO `fastfood_shop` VALUES ('天美馋嘴鸭', 16, 61);
 INSERT INTO `fastfood_shop` VALUES ('小美烤盘饭', 12, 101);
@@ -80,16 +80,16 @@ CREATE TABLE `oorder`  (
   `checked` int NULL DEFAULT 0,
   `create_time` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL,
   PRIMARY KEY (`order_id`) USING BTREE,
-  UNIQUE INDEX `order_id`(`order_id`) USING BTREE,
-  INDEX `shop_name`(`shop_name`) USING BTREE,
-  INDEX `order_money`(`order_money`) USING BTREE,
-  INDEX `order_way`(`order_way`) USING BTREE,
-  INDEX `cons_phone`(`cons_phone`) USING BTREE,
-  INDEX `cons_name`(`cons_name`) USING BTREE,
-  INDEX `cons_addre`(`cons_addre`) USING BTREE,
-  INDEX `checked`(`checked`) USING BTREE,
-  INDEX `create_time`(`create_time`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = DYNAMIC;
+  UNIQUE INDEX `order_id`(`order_id` ASC) USING BTREE,
+  INDEX `shop_name`(`shop_name` ASC) USING BTREE,
+  INDEX `order_money`(`order_money` ASC) USING BTREE,
+  INDEX `order_way`(`order_way` ASC) USING BTREE,
+  INDEX `cons_phone`(`cons_phone` ASC) USING BTREE,
+  INDEX `cons_name`(`cons_name` ASC) USING BTREE,
+  INDEX `cons_addre`(`cons_addre` ASC) USING BTREE,
+  INDEX `checked`(`checked` ASC) USING BTREE,
+  INDEX `create_time`(`create_time` ASC) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of oorder
@@ -97,6 +97,7 @@ CREATE TABLE `oorder`  (
 INSERT INTO `oorder` VALUES (1, '大美鸡公煲', 12, '人工订餐', '13525188888', '老三', '15公寓', 0, '2022-12-16 14:35:17');
 INSERT INTO `oorder` VALUES (2, '小美负一楼蛋炒饭', 10, '人工订餐', '13525188888', '吴方', '10公寓', 2, '2022-12-16 14:35:26');
 INSERT INTO `oorder` VALUES (3, '至美猪脚饭', 20, '人工订餐', '13525188888', '吴方', '8公寓', 0, '2022-12-16 14:35:35');
+INSERT INTO `oorder` VALUES (4, '大美鸡公煲', 15, '人工订餐', '18173514937', '谭一', '中山大学东南门', 0, '2026-01-13 19:44:22');
 
 -- ----------------------------
 -- Table structure for orderway
@@ -106,15 +107,15 @@ CREATE TABLE `orderway`  (
   `orderway_name` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL COMMENT '订餐方式',
   `count` int NOT NULL COMMENT '该种方式的订餐数量',
   PRIMARY KEY (`orderway_name`) USING BTREE,
-  UNIQUE INDEX `orderway_name`(`orderway_name`) USING BTREE,
-  INDEX `count`(`count`) USING BTREE
+  UNIQUE INDEX `orderway_name`(`orderway_name` ASC) USING BTREE,
+  INDEX `count`(`count` ASC) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of orderway
 -- ----------------------------
 INSERT INTO `orderway` VALUES ('网上订餐', 51);
-INSERT INTO `orderway` VALUES ('人工订餐', 108);
+INSERT INTO `orderway` VALUES ('人工订餐', 109);
 
 -- ----------------------------
 -- Table structure for server
@@ -125,9 +126,9 @@ CREATE TABLE `server`  (
   `service_name` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
   `fastfood_shop_name` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL COMMENT '所在的店铺名字',
   PRIMARY KEY (`service_id`) USING BTREE,
-  UNIQUE INDEX `service_id`(`service_id`) USING BTREE,
-  INDEX `service_name`(`service_name`) USING BTREE,
-  INDEX `fastfood_shop_name`(`fastfood_shop_name`) USING BTREE
+  UNIQUE INDEX `service_id`(`service_id` ASC) USING BTREE,
+  INDEX `service_name`(`service_name` ASC) USING BTREE,
+  INDEX `fastfood_shop_name`(`fastfood_shop_name` ASC) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -136,6 +137,34 @@ CREATE TABLE `server`  (
 INSERT INTO `server` VALUES ('100000', '刀哥', '小美烤盘饭');
 INSERT INTO `server` VALUES ('100001', '司徒王朗', '小美麻辣烫');
 INSERT INTO `server` VALUES ('100011', '虎哥', '大美鸡公煲');
+
+-- ----------------------------
+-- Table structure for shop_apply
+-- ----------------------------
+DROP TABLE IF EXISTS `shop_apply`;
+CREATE TABLE `shop_apply`  (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `shop_name` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
+  `price` int NOT NULL,
+  `contact_name` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
+  `contact_phone` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
+  `description` varchar(500) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL DEFAULT NULL,
+  `status` int NOT NULL DEFAULT 0 COMMENT '0:待审核,1:通过,2:拒绝',
+  `apply_time` datetime NULL DEFAULT CURRENT_TIMESTAMP,
+  `process_time` datetime NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE,
+  UNIQUE INDEX `id`(`id` ASC) USING BTREE,
+  INDEX `shop_name`(`shop_name` ASC) USING BTREE,
+  INDEX `status`(`status` ASC) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of shop_apply
+-- ----------------------------
+INSERT INTO `shop_apply` VALUES (1, '233', 12, '谭', '18173514937', '哈哈哈', 2, '2026-01-13 19:42:06', '2026-01-14 09:26:37');
+INSERT INTO `shop_apply` VALUES (2, '使用', 123, '谭', '13808442837', '哈哈哈', 2, '2026-01-13 19:48:06', '2026-01-14 09:26:39');
+INSERT INTO `shop_apply` VALUES (3, '探索的', 12, '看', '13800000000', '啊手动阀', 2, '2026-01-13 19:53:10', '2026-01-14 09:26:41');
+INSERT INTO `shop_apply` VALUES (4, '洗尽钱华', 114514, '谭某（犯罪嫌疑人）', '18173514937', '一个专注于洗钱的店铺', 1, '2026-01-13 19:55:15', '2026-01-13 19:57:56');
 
 -- ----------------------------
 -- Table structure for user
@@ -148,18 +177,20 @@ CREATE TABLE `user`  (
   `telephone` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
   `role` int NOT NULL,
   PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `id`(`id`) USING BTREE COMMENT '主键索引，选UNIQUE',
-  INDEX `username`(`username`) USING BTREE,
-  INDEX `password`(`password`) USING BTREE,
-  INDEX `telephone`(`telephone`) USING BTREE,
-  INDEX `role`(`role`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = DYNAMIC;
+  UNIQUE INDEX `id`(`id` ASC) USING BTREE COMMENT '主键索引，选UNIQUE',
+  INDEX `username`(`username` ASC) USING BTREE,
+  INDEX `password`(`password` ASC) USING BTREE,
+  INDEX `telephone`(`telephone` ASC) USING BTREE,
+  INDEX `role`(`role` ASC) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
+INSERT INTO `user` VALUES (1, 'admin', '114514', '13808442837', 1);
 INSERT INTO `user` VALUES (2, 'iu', '123456789', '13525188888', 0);
 INSERT INTO `user` VALUES (3, 'mty', '123456', '15967789756', 0);
+INSERT INTO `user` VALUES (4, 'chao', 'asdasd', '18173514937', 0);
 
 -- ----------------------------
 -- Table structure for user_msg
@@ -173,13 +204,13 @@ CREATE TABLE `user_msg`  (
   `mail` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
   `phone` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
   `user_name` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
-  INDEX `userid`(`id`) USING BTREE,
-  INDEX `real_name`(`real_name`) USING BTREE,
-  INDEX `sex`(`sex`) USING BTREE,
-  INDEX `age`(`age`) USING BTREE,
-  INDEX `mail`(`mail`) USING BTREE,
-  INDEX `phone`(`phone`) USING BTREE,
-  INDEX `user_name`(`user_name`) USING BTREE,
+  INDEX `userid`(`id` ASC) USING BTREE,
+  INDEX `real_name`(`real_name` ASC) USING BTREE,
+  INDEX `sex`(`sex` ASC) USING BTREE,
+  INDEX `age`(`age` ASC) USING BTREE,
+  INDEX `mail`(`mail` ASC) USING BTREE,
+  INDEX `phone`(`phone` ASC) USING BTREE,
+  INDEX `user_name`(`user_name` ASC) USING BTREE,
   CONSTRAINT `userid` FOREIGN KEY (`id`) REFERENCES `user` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = DYNAMIC;
 
@@ -200,38 +231,17 @@ CREATE TABLE `wuliu`  (
   `deliver_time` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
   `ended` int NOT NULL DEFAULT 0 COMMENT '是否结束',
   PRIMARY KEY (`order_id`) USING BTREE,
-  UNIQUE INDEX `order_id`(`order_id`) USING BTREE,
-  INDEX `cons_phone`(`cons_phone`) USING BTREE,
-  INDEX `disp_id`(`disp_id`) USING BTREE,
-  INDEX `deliver_time`(`deliver_time`) USING BTREE,
-  INDEX `ended`(`ended`) USING BTREE
+  UNIQUE INDEX `order_id`(`order_id` ASC) USING BTREE,
+  INDEX `cons_phone`(`cons_phone` ASC) USING BTREE,
+  INDEX `disp_id`(`disp_id` ASC) USING BTREE,
+  INDEX `deliver_time`(`deliver_time` ASC) USING BTREE,
+  INDEX `ended`(`ended` ASC) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of wuliu
 -- ----------------------------
 INSERT INTO `wuliu` VALUES (2, '13525112345', '010100', '20分钟', 0);
-
--- ----------------------------
--- Table structure for shop_apply
--- ----------------------------
-DROP TABLE IF EXISTS `shop_apply`;
-CREATE TABLE `shop_apply`  (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `shop_name` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
-  `price` int NOT NULL,
-  `contact_name` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
-  `contact_phone` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
-  `description` varchar(500) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NULL,
-  `status` int NOT NULL DEFAULT 0 COMMENT '0:待审核,1:通过,2:拒绝',
-  `apply_time` datetime NULL DEFAULT CURRENT_TIMESTAMP,
-  `process_time` datetime NULL,
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `id`(`id`) USING BTREE,
-  INDEX `shop_name`(`shop_name`) USING BTREE,
-  INDEX `status`(`status`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = DYNAMIC;
-
 
 -- ----------------------------
 -- View structure for sended_order
@@ -244,6 +254,30 @@ CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `sended_order` AS select 
 -- ----------------------------
 DROP VIEW IF EXISTS `sending_order`;
 CREATE ALGORITHM = UNDEFINED SQL SECURITY DEFINER VIEW `sending_order` AS select `oorder`.`order_id` AS `order_id`,`oorder`.`shop_name` AS `shop_name`,`oorder`.`order_money` AS `order_money`,`oorder`.`order_way` AS `order_way`,`oorder`.`cons_phone` AS `cons_phone`,`oorder`.`cons_name` AS `cons_name`,`oorder`.`cons_addre` AS `cons_addre`,`wuliu`.`disp_id` AS `disp_id`,`wuliu`.`deliver_time` AS `deliver_time`,`dispatcher`.`dispatcher_phone` AS `dispatcher_phone` from ((`oorder` join `wuliu` on((`oorder`.`order_id` = `wuliu`.`order_id`))) join `dispatcher` on((`wuliu`.`disp_id` = `dispatcher`.`dispatcher_id`))) where (`oorder`.`checked` = 1);
+
+-- ----------------------------
+-- View structure for shop_revenue_view
+-- ----------------------------
+DROP VIEW IF EXISTS `shop_revenue_view`;
+CREATE VIEW `shop_revenue_view` AS
+SELECT 
+    fs.shop_name,
+    fs.m_sale_v AS order_count,
+    fs.price * fs.m_sale_v AS total_revenue,
+    fs.price AS avg_order_value
+FROM fastfood_shop fs;
+
+-- ----------------------------
+-- View structure for platform_revenue_view
+-- ----------------------------
+DROP VIEW IF EXISTS `platform_revenue_view`;
+CREATE VIEW `platform_revenue_view` AS
+SELECT 
+    '平台总计' AS stat_name,
+    SUM(fs.m_sale_v) AS total_orders,
+    SUM(fs.price * fs.m_sale_v) AS total_revenue,
+    AVG(fs.price) AS avg_order_value
+FROM fastfood_shop fs;
 
 -- ----------------------------
 -- Triggers structure for table oorder
