@@ -54,7 +54,7 @@ npm run serve
 
 点击任意链接都可以
 
-![image-20231120183929187](https://raw.githubusercontent.com/wfloveiu/blogImage/main/img/202311201839228.png)
+![image-20231120183929187](6-登录界面.png)
 
 此时，你的前端项目就算是跑起来了
 
