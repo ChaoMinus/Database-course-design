@@ -13,9 +13,13 @@
 
  Date: 14/01/2026 10:09:31
 */
-
+CREATE DATABASE IF NOT EXISTS Zhangsan CHARACTER SET utf8mb3;
+USE zhangsan;
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
+
+CREATE USER IF NOT EXISTS 'agent'@'localhost' IDENTIFIED BY '123456';
+GRANT All PRIVILEGES ON zhangsan.* TO 'agent'@'localhost';
 
 -- ----------------------------
 -- Table structure for dispatcher
@@ -25,10 +29,7 @@ CREATE TABLE `dispatcher`  (
   `dispatcher_id` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
   `dispatcher_name` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
   `dispatcher_phone` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
-  PRIMARY KEY (`dispatcher_id`) USING BTREE,
-  UNIQUE INDEX `dispatcher_id`(`dispatcher_id` ASC) USING BTREE,
-  INDEX `dispatcher_name`(`dispatcher_name` ASC) USING BTREE,
-  INDEX `dispatcher_phone`(`dispatcher_phone` ASC) USING BTREE
+  PRIMARY KEY (`dispatcher_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -47,10 +48,7 @@ CREATE TABLE `fastfood_shop`  (
   `shop_name` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
   `price` int NOT NULL COMMENT '价格',
   `m_sale_v` int NOT NULL COMMENT '销售量',
-  PRIMARY KEY (`shop_name`) USING BTREE,
-  UNIQUE INDEX `shop_name`(`shop_name` ASC) USING BTREE,
-  INDEX `price`(`price` ASC) USING BTREE,
-  INDEX `m_sale_v`(`m_sale_v` ASC) USING BTREE
+  PRIMARY KEY (`shop_name`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -82,12 +80,6 @@ CREATE TABLE `oorder`  (
   PRIMARY KEY (`order_id`) USING BTREE,
   UNIQUE INDEX `order_id`(`order_id` ASC) USING BTREE,
   INDEX `shop_name`(`shop_name` ASC) USING BTREE,
-  INDEX `order_money`(`order_money` ASC) USING BTREE,
-  INDEX `order_way`(`order_way` ASC) USING BTREE,
-  INDEX `cons_phone`(`cons_phone` ASC) USING BTREE,
-  INDEX `cons_name`(`cons_name` ASC) USING BTREE,
-  INDEX `cons_addre`(`cons_addre` ASC) USING BTREE,
-  INDEX `checked`(`checked` ASC) USING BTREE,
   INDEX `create_time`(`create_time` ASC) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = DYNAMIC;
 
@@ -106,9 +98,7 @@ DROP TABLE IF EXISTS `orderway`;
 CREATE TABLE `orderway`  (
   `orderway_name` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL COMMENT '订餐方式',
   `count` int NOT NULL COMMENT '该种方式的订餐数量',
-  PRIMARY KEY (`orderway_name`) USING BTREE,
-  UNIQUE INDEX `orderway_name`(`orderway_name` ASC) USING BTREE,
-  INDEX `count`(`count` ASC) USING BTREE
+  PRIMARY KEY (`orderway_name`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -125,10 +115,7 @@ CREATE TABLE `server`  (
   `service_id` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL COMMENT '服务员编号',
   `service_name` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
   `fastfood_shop_name` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL COMMENT '所在的店铺名字',
-  PRIMARY KEY (`service_id`) USING BTREE,
-  UNIQUE INDEX `service_id`(`service_id` ASC) USING BTREE,
-  INDEX `service_name`(`service_name` ASC) USING BTREE,
-  INDEX `fastfood_shop_name`(`fastfood_shop_name` ASC) USING BTREE
+  PRIMARY KEY (`service_id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -153,8 +140,6 @@ CREATE TABLE `shop_apply`  (
   `apply_time` datetime NULL DEFAULT CURRENT_TIMESTAMP,
   `process_time` datetime NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `id`(`id` ASC) USING BTREE,
-  INDEX `shop_name`(`shop_name` ASC) USING BTREE,
   INDEX `status`(`status` ASC) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = DYNAMIC;
 
@@ -177,11 +162,7 @@ CREATE TABLE `user`  (
   `telephone` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
   `role` int NOT NULL,
   PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `id`(`id` ASC) USING BTREE COMMENT '主键索引，选UNIQUE',
-  INDEX `username`(`username` ASC) USING BTREE,
-  INDEX `password`(`password` ASC) USING BTREE,
-  INDEX `telephone`(`telephone` ASC) USING BTREE,
-  INDEX `role`(`role` ASC) USING BTREE
+  UNIQUE INDEX `id`(`id` ASC) USING BTREE COMMENT '主键索引，选UNIQUE'
 ) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -197,7 +178,7 @@ INSERT INTO `user` VALUES (4, 'chao', 'asdasd', '18173514937', 0);
 -- ----------------------------
 DROP TABLE IF EXISTS `user_msg`;
 CREATE TABLE `user_msg`  (
-  `id` int UNSIGNED NULL DEFAULT NULL,
+  `id` int UNSIGNED NOT NULL,
   `real_name` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
   `sex` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
   `age` int NOT NULL,
@@ -205,12 +186,6 @@ CREATE TABLE `user_msg`  (
   `phone` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
   `user_name` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL,
   INDEX `userid`(`id` ASC) USING BTREE,
-  INDEX `real_name`(`real_name` ASC) USING BTREE,
-  INDEX `sex`(`sex` ASC) USING BTREE,
-  INDEX `age`(`age` ASC) USING BTREE,
-  INDEX `mail`(`mail` ASC) USING BTREE,
-  INDEX `phone`(`phone` ASC) USING BTREE,
-  INDEX `user_name`(`user_name` ASC) USING BTREE,
   CONSTRAINT `userid` FOREIGN KEY (`id`) REFERENCES `user` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = DYNAMIC;
 
@@ -232,10 +207,7 @@ CREATE TABLE `wuliu`  (
   `ended` int NOT NULL DEFAULT 0 COMMENT '是否结束',
   PRIMARY KEY (`order_id`) USING BTREE,
   UNIQUE INDEX `order_id`(`order_id` ASC) USING BTREE,
-  INDEX `cons_phone`(`cons_phone` ASC) USING BTREE,
-  INDEX `disp_id`(`disp_id` ASC) USING BTREE,
-  INDEX `deliver_time`(`deliver_time` ASC) USING BTREE,
-  INDEX `ended`(`ended` ASC) USING BTREE
+  CONSTRAINT `wuliu_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `oorder` (`order_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB CHARACTER SET = utf8mb3 COLLATE = utf8mb3_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -358,5 +330,98 @@ WHERE oorder.order_id=new.order_id;
 END
 ;;
 delimiter ;
+
+
+
+DROP PROCEDURE IF EXISTS batch_insert_random_orders;
+DELIMITER $$
+
+-- 存储过程：批量插入随机订单
+-- 参数说明：
+-- p_batch_count: 要插入的订单数量
+CREATE PROCEDURE batch_insert_random_orders(IN p_batch_count INT)
+BEGIN
+    -- 声明变量
+    DECLARE v_i INT DEFAULT 1;  -- 循环计数器
+    DECLARE v_shop_name VARCHAR(50);  -- 随机店铺名称
+    DECLARE v_order_money INT;  -- 订单金额（取自店铺价格）
+    DECLARE v_order_way VARCHAR(50);  -- 随机订餐方式
+    DECLARE v_cons_phone VARCHAR(50); -- 随机联系电话
+    DECLARE v_cons_name VARCHAR(50);  -- 随机联系人姓名
+    DECLARE v_cons_addre VARCHAR(50); -- 随机收货地址
+    DECLARE v_create_time DATETIME;   -- 订单创建时间（随机近期时间）
+
+    -- 定义收货地址列表（基于现有数据扩展）
+    SET @address_list = '15公寓,10公寓,8公寓,中山大学东南门,小美食堂楼下,大美商业街,至美美食城,天美超市旁,负一楼美食区';
+    -- 定义联系人姓名列表（基于现有数据扩展）
+    SET @name_list = '老三,吴方,谭一,摇摆羊,小亮,老八,赵三金,刀哥,司徒王朗,虎哥';
+
+    -- 循环插入订单
+    WHILE v_i <= p_batch_count DO
+        -- 1. 随机获取店铺名称，并获取对应价格作为订单金额
+        SELECT fs.shop_name, fs.price INTO v_shop_name, v_order_money
+        FROM fastfood_shop fs
+        ORDER BY RAND()
+        LIMIT 1;
+
+        -- 2. 随机获取订餐方式
+        SELECT ow.orderway_name INTO v_order_way
+        FROM orderway ow
+        ORDER BY RAND()
+        LIMIT 1;
+
+        -- 3. 随机获取联系电话（取自现有订单/用户数据）
+        -- 只从用户表中随机获取联系电话
+        SELECT telephone INTO v_cons_phone
+        FROM user
+        -- 过滤掉空值和空字符串，保证数据有效性
+        WHERE telephone IS NOT NULL AND telephone != ''
+        ORDER BY RAND()
+        LIMIT 1;
+
+        -- 4. 随机获取联系人姓名
+        SET v_cons_name = SUBSTRING_INDEX(SUBSTRING_INDEX(@name_list, ',', FLOOR(RAND() * LENGTH(@name_list) - LENGTH(REPLACE(@name_list, ',', '')) + 1)), ',', -1);
+
+        -- 5. 随机获取收货地址
+        SET v_cons_addre = SUBSTRING_INDEX(SUBSTRING_INDEX(@address_list, ',', FLOOR(RAND() * LENGTH(@address_list) - LENGTH(REPLACE(@address_list, ',', '')) + 1)), ',', -1);
+
+        -- 6. 生成随机创建时间（近30天内）
+        SET v_create_time = DATE_SUB(NOW(), INTERVAL FLOOR(RAND() * 30 * 24 * 60) MINUTE);
+
+        -- 7. 插入订单数据
+        INSERT INTO oorder (
+            shop_name, 
+            order_money, 
+            order_way, 
+            cons_phone, 
+            cons_name, 
+            cons_addre, 
+            checked, 
+            create_time
+        ) VALUES (
+            v_shop_name,
+            v_order_money,
+            v_order_way,
+            v_cons_phone,
+            v_cons_name,
+            v_cons_addre,
+            0,  -- 初始未审核
+            DATE_FORMAT(v_create_time, '%Y-%m-%d %H:%i:%s')
+        );
+
+        -- 计数器+1
+        SET v_i = v_i + 1;
+    END WHILE;
+
+    -- 输出执行结果
+    SELECT CONCAT('成功插入 ', p_batch_count, ' 条随机订单数据') AS result;
+END $$
+
+DELIMITER ;
+
+-- 调用存储过程，插入20条随机订单
+CALL batch_insert_random_orders(20);
+
+
 
 SET FOREIGN_KEY_CHECKS = 1;
